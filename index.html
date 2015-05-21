@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<script src="bower_components/jquery/dist/jquery.js"></script>
+		<script src="bower_components/angular/angular.js"></script>
+		<script src="bower_components/angular-route/angular-route.js"></script>
+		<script src="src/app.js"></script>
+	</head>
+	<body data-ng-app="app">
+		<div data-ng-view>
+			
+		</div>
+		<script>
+			var garbage 	= [];
+			var garbageSize	= 1024 * 1024 * 6;
+			var garbageIdx	= 0;
+			function makeGarbage(amount){
+				for(var i = 0; i < amount; i++){
+					//garbage[garbageIdx]	= new Object();
+					garbage[garbageIdx]	= {};
+					garbageIdx	= (garbageIdx+1) % garbageSize;
+				}
+			}
+			
+			var times = 20;
+			console.profile();
+			function startTest(){
+				if (--times > 0) {
+					navigateTo('/aboutus', function () {
+						navigateTo('/home', startTest);
+					});
+				} else {
+					console.profileEnd();
+				}
+			}
+			function warmUp(){
+				navigateTo('/aboutus', function () {
+					navigateTo('/home', startTest);
+				});
+			}
+			
+			var injector, locationService, rootScope;
+			
+			function navigateTo(url, cb) {
+				if (!injector) {
+					injector = angular.element(document.body).injector();
+					locationService = injector.get('$location');
+					rootScope = injector.get('$rootScope');
+				}
+				
+				rootScope.$apply(function () {
+					locationService.path(url);
+				});
+				
+				setTimeout(cb, 1000);
+			}
+		</script>
+	</body>
+</html>

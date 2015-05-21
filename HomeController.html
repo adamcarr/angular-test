@@ -1,0 +1,7 @@
+<div>
+	{{::name}} | {{watchCount}} | <button data-ng-click="handleClick()">click</button>
+	<hr />
+	<div data-ng-repeat="value in values">
+		<span data-ng-bind="::value"></span>
+	</div>
+</div>
